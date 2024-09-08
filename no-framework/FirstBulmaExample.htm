@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Bulma Example</title>
+
+    <!-- Link to Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #31ebe1;
+        }
+
+        .navbar-item:hover {
+            background-color: #797373;
+            color: #31ebe1;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #bebcbc;
+        }
+
+        .table-of-contents {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px; /* Keeps the ToC fixed as you scroll */
+        }
+
+        .table-of-contents ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .table-of-contents a {
+            text-decoration: none;
+            color: #31ebe1;
+        }
+
+        .table-of-contents a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <!-- First Button -->
+            <a class="navbar-item button is-primary" href="#">
+                Home
+            </a>
+
+            <!-- Bulma Dropdown in Navbar -->
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    Docs
+                </a>
+
+                <!-- Dropdown Menu -->
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="#">
+                        Overview
+                    </a>
+                    <a class="navbar-item" href="#">
+                        Modifiers
+                    </a>
+                    <a class="navbar-item" href="#">
+                        Columns
+                    </a>
+                    <a class="navbar-item" href="#">
+                        Layout
+                    </a>
+                    <a class="navbar-item" href="#">
+                        Form
+                    </a>
+                    <a class="navbar-item" href="#">
+                        Elements
+                    </a>
+                    <a class="navbar-item" href="#">
+                        Components
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container with columns -->
+    <div class="container mt-5">
+        <div class="columns">
+            <!-- Main content (left column) -->
+            <div class="column is-three-quarters">
+                <h1 class="title">Hello World</h1>
+                <p class="subtitle">My first Bulma example</p>
+                <button class="button is-primary">Click me</button>
+
+                <section id="section1">
+                    <h2 class="title">Section 1</h2>
+                    <p>Content for section 1 goes here.</p>
+                </section>
+
+                <section id="section2">
+                    <h2 class="title">Section 2</h2>
+                    <p>Content for section 2 goes here.</p>
+                </section>
+
+                <section id="section3">
+                    <h2 class="title">Section 3</h2>
+                    <p>Content for section 3 goes here.</p>
+                </section>
+            </div>
+
+            <!-- Table of Contents (right column) -->
+            <div class="column is-one-quarter">
+                <div class="table-of-contents">
+                    <h2 class="title is-5">Table of Contents</h2>
+                    <ul>
+                        <li><a href="#section1">Section 1</a></li>
+                        <li><a href="#section2">Section 2</a></li>
+                        <li><a href="#section3">Section 3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulma CDN for JavaScript if needed -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/js/all.min.js"></script>
+</body>
+</html>
