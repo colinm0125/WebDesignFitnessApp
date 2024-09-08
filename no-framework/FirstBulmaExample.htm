@@ -26,29 +26,6 @@
         .dropdown-content a:hover {
             background-color: #bebcbc;
         }
-
-        .table-of-contents {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 20px; /* Keeps the ToC fixed as you scroll */
-        }
-
-        .table-of-contents ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .table-of-contents a {
-            text-decoration: none;
-            color: #31ebe1;
-        }
-
-        .table-of-contents a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -59,63 +36,47 @@
                 <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
                 <span style="font-weight: bold;">: a</span>
             </a>
+        </div>
 
         <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-item button is-primary" href="#">
-                <a class="navbar-item" href="#">
-                Home
-            </a>
+            <div class="navbar-item button is-primary">
+                <a class="navbar-item" href="#">Home</a>
+            </div>
+
             <!-- Bulma Dropdown in Navbar -->
             <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    Docs
-                </a>
+                <a class="navbar-link">Docs</a>
                 <!-- Dropdown Menu -->
                 <div class="navbar-dropdown">
-                    <a class="navbar-item" href="#">
-                        Overview
-                    </a>
-                    <a class="navbar-item" href="#">
-                        Modifiers
-                    </a>
-                    <a class="navbar-item" href="#">
-                        Columns
-                    </a>
-                    <a class="navbar-item" href="#">
-                        Layout
-                    </a>
-                    <a class="navbar-item" href="#">
-                        Form
-                    </a>
-                    <a class="navbar-item" href="#">
-                        Elements
-                    </a>
-                    <a class="navbar-item" href="#">
-                        Components
-                    </a>
+                    <a class="navbar-item" href="#">Overview</a>
+                    <a class="navbar-item" href="#">Modifiers</a>
+                    <a class="navbar-item" href="#">Columns</a>
+                    <a class="navbar-item" href="#">Layout</a>
+                    <a class="navbar-item" href="#">Form</a>
+                    <a class="navbar-item" href="#">Elements</a>
+                    <a class="navbar-item" href="#">Components</a>
                 </div>
             </div>
 
             <div class="navbar-end">
-                <div class = "navbar-item">
-                    <a class= "button is-light"> Tweet</a>
+                <div class="navbar-item">
+                    <a class="button is-light">Tweet</a>
                 </div>
-                <div class = "navbar-item">
-                    <a class= "button is-light"> Download</a>
+                <div class="navbar-item">
+                    <a class="button is-light">Download</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Container with columns -->
+    <!-- Main Content Container with columns -->
     <div class="container mt-6 pt-5">
         <div class="columns">
-            <!--Left Component Column-->
+            <!-- Left Column (1/5 width) for Component -->
             <div class="column is-one-fifth">
                 <div class="card mb-5">
                     <header class="card-header">
-                        <p class="card-header-title">
-                            Component
-                        </p>
+                        <p class="card-header-title">Component</p>
                         <a class="card-header-icon">
                             <span class="icon">
                                 <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -128,16 +89,19 @@
                             <br>
                             <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                         </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a href="#" class="card-footer-item">Save</a>
+                        <a href="#" class="card-footer-item">Edit</a>
+                        <a href="#" class="card-footer-item">Delete</a>
+                    </footer>
                 </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Save</a>
-                    <a href="#" class="card-footer-item">Edit</a>
-                    <a href="#" class="card-footer-item">Delete</a>
-                </footer>
             </div>
 
-            <!--Second Card: Task List-->
-            <div class="column is-two-fifths">
+            <!-- Middle Column (3/5 width) for Task List, Progress Card, Form, etc. -->
+            <div class="column is-three-fifths">
+
+                <!-- Task List -->
                 <div class="card mb-5">
                     <header class="card-header">
                         <div class="tabs is-fullwidth card-header-title">
@@ -157,17 +121,16 @@
                             <label class="checkbox"><input type="checkbox" checked> Make Bulma Great Again</label><br>
                             <label class="checkbox"><input type="checkbox"> Add some more features</label><br>
                             <label class="checkbox"><input type="checkbox"> Make a github account</label><br>
-                            <label class="checkbox"><input type="checkbox"> Learn how to use GitHub</label>
+                            <label class="checkbox"><input type="checkbox"> Learn how to use GitHub</label><br>
                             <label class="checkbox"><input type="checkbox"> Add a .gitignore file</label><br>
                         </div>
                     </div>
                 </div>
-                <!--GitHub Progress Card-->
+
+                <!-- GitHub Progress Card -->
                 <div class="card mb-5">
                     <header class="card-header">
-                        <p class="card-header-title">
-                            Make a GitHub Account
-                        </p>
+                        <p class="card-header-title">Make a GitHub Account</p>
                         <button class="card-header-icon" aria-label="more options">
                             <span class="icon">
                                 <i class="fas fa-times" aria-hidden="true"></i>
@@ -183,81 +146,86 @@
                     </div>
                 </div>
 
-                <!--Form Section-->
+                <!-- Form Section -->
                 <div class="box">
                     <div class="field">
                         <label class="label">Name</label>
                         <div class="control">
                             <input class="input" type="text" placeholder="Text input">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">Username</label>
-                    <div class="control has-icons-left has-icons-right">
-                        <input class="input is-success" type="text" placeholder="Text input" value="bulma">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-user"></i>
-                        </span>
-                        <span class="icon is-small is-right">
-                            <i class="fas fa-check"></i>
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input is-success" type="text" placeholder="Text input" value="bulma">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </div>
+                        <p class="help is-success">This username is available</p>
                     </div>
-                    <p class="help is-success">This username is available</p>
-                </div>
 
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control has-icons-left has-icons-right">
-                        <input class="input is-danger" type="email" placeholder="Email input" value="hello@">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-envelope"></i>
-                        </span>
-                        <span class="icon is-small is-right">
-                            <i class="fas fa-exclamation-triangle"></i>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input is-danger" type="email" placeholder="Email input" value="hello@">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </span>
+                        </div>
+                        <p class="help is-danger">This email is invalid</p>
                     </div>
-                    <p class="help is-danger">This email is invalid</p>
-                </div>
 
-                <div class="field">
-                    <label class="label">Subject</label>
-                    <div class="control">
-                        <div class="select">
-                            <select>
-                                <option>Select dropdown</option>
-                                <option>With options</option>
-                            </select>
+                    <div class="field">
+                        <label class="label">Subject</label>
+                        <div class="control">
+                            <div class="select">
+                                <select>
+                                    <option>Select dropdown</option>
+                                    <option>With options</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="label">Message</label>
+                        <div class="control">
+                            <textarea class="textarea" placeholder="Textarea"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                I agree to the <a href="#">terms and conditions</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question">
+                                Yes
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="question">
+                                No
+                            </label>
                         </div>
                     </div>
                 </div>
-                
-                <div class="field">
-                    <label class="label">Message</label>
-                    <div class="control">
-                        <textarea class="textarea" placeholder="Textarea"></textarea>
-                    </div>
-                </div>
-                
-                <div class="field">
-                    <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            I agree to the <a href="#">terms and conditions</a>
-                        </label>
-                    </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <label class="radio">
-                            <input type="radio" name="question">
-                            Yes
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="question">
-                            No
-                        </label>
-                    </div>
-                </div>
             </div>
+
         </div>
     </div>
 
