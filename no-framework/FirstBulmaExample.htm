@@ -55,17 +55,21 @@
     <!-- Navbar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <!-- First Button -->
-            <a class="navbar-item button is-primary" href="#">
-                Home
+            <a class="navbar-item" href="#">
+                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                <span style="font-weight: bold;">: a</span>
             </a>
 
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-item button is-primary" href="#">
+                <a class="navbar-item" href="#">
+                Home
+            </a>
             <!-- Bulma Dropdown in Navbar -->
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
                     Docs
                 </a>
-
                 <!-- Dropdown Menu -->
                 <div class="navbar-dropdown">
                     <a class="navbar-item" href="#">
@@ -91,49 +95,81 @@
                     </a>
                 </div>
             </div>
+
+            <div class="navbar-end">
+                <div class = "navbar-item">
+                    <a class= "button is-light"> Tweet</a>
+                </div>
+                <div class = "navbar-item">
+                    <a class= "button is-light"> Download</a>
+            </div>
         </div>
     </nav>
 
     <!-- Container with columns -->
-    <div class="container mt-5">
+    <div class="container mt-6 pt-5">
         <div class="columns">
-            <!-- Main content (left column) -->
-            <div class="column is-three-quarters">
-                <h1 class="title">Hello World</h1>
-                <p class="subtitle">My first Bulma example</p>
-                <button class="button is-primary">Click me</button>
-
-                <section id="section1">
-                    <h2 class="title">Section 1</h2>
-                    <p>Content for section 1 goes here.</p>
-                </section>
-
-                <section id="section2">
-                    <h2 class="title">Section 2</h2>
-                    <p>Content for section 2 goes here.</p>
-                </section>
-
-                <section id="section3">
-                    <h2 class="title">Section 3</h2>
-                    <p>Content for section 3 goes here.</p>
-                </section>
+            <!--Left Component Column-->
+            <div class="column is-one-fifth">
+                <div class="card mb-5">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            Component
+                        </p>
+                        <a class="card-header-icon">
+                            <span class="icon">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                            <br>
+                            <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                        </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item">Save</a>
+                    <a href="#" class="card-footer-item">Edit</a>
+                    <a href="#" class="card-footer-item">Delete</a>
+                </footer>
             </div>
 
-            <!-- Table of Contents (right column) -->
-            <div class="column is-one-quarter">
-                <div class="table-of-contents">
-                    <h2 class="title is-5">Table of Contents</h2>
-                    <ul>
-                        <li><a href="#section1">Section 1</a></li>
-                        <li><a href="#section2">Section 2</a></li>
-                        <li><a href="#section3">Section 3</a></li>
-                    </ul>
+            <!--Second Card: Task List-->
+            <div class="column is-two-fifths">
+                <div class="card mb-5">
+                    <header class="card-header">
+                        <div class="tabs is-fullwidth card-header-title">
+                            <ul>
+                                <li class="is-active"><a>Current</a></li>
+                                <li><a>Completed</a></li>
+                                <li><a>Upcoming</a></li>
+                                <li><a>All</a></li>
+                            </ul>
+                        </div>
+                    </header>
+                    <div class="card-content">
+                        <div class="field">
+                            <input class="input" type="text" placeholder="Add a new task">
+                        </div>
+                        <div class="content">
+                            <label class="checkbox"><input type="checkbox" checked> Make Bulma Great Again</label><br>
+                            <label class="checkbox"><input type="checkbox"> Add some more features</label><br>
+                            <label class="checkbox"><input type="checkbox"> Make a github account</label><br>
+                            <label class="checkbox"><input type="checkbox"> Learn how to use GitHub</label>
+                            <label class="checkbox"><input type="checkbox"> Add a .gitignore file</label><br>
+                        </div>
+                    </div>
+                </div>
+                <!--GitHub Progress Card-->
+                <div class="card mb-5">
+                    <header class="card-header">
+
+                    </header>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Bulma CDN for JavaScript if needed -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/js/all.min.js"></script>
 </body>
 </html>
