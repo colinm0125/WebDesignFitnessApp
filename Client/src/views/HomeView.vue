@@ -10,7 +10,7 @@
         </h2>
 
         <div class="buttons is-centered">
-          <RouterLink to="/workouts" class="button is-primary is-large">
+          <RouterLink to="/expertise-level" class="button is-primary is-large">
             Explore Workouts
           </RouterLink>
           <RouterLink to="/nutrition" class="button is-light is-large">
