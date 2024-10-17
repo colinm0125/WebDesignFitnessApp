@@ -35,6 +35,11 @@ const router = createRouter({
       path: '/expertise-level',
       name: 'expertise-level',
       component: () => import ('../views/ExpertiseLevelView.vue')
+    },
+    {
+      path: '/workout-tracker',
+      name: 'workout-tracker',
+      component: () => import ('../views/WorkoutTrackerView.vue')
     }
   ]
 })
