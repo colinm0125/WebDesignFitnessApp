@@ -131,3 +131,53 @@ export default defineComponent({
     }
 });
 </script>
+
+<style scoped>
+.hero-body {
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: white; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: #4a4a4a; 
+}
+
+.input {
+  background-color: #f9f9f9; 
+  color: #4a4a4a;            
+  border: 1px solid #ddd;     
+  border-radius: 5px;         
+  box-shadow: none;           
+}
+
+.input::placeholder {
+  color: gray; 
+}
+
+.button {
+  margin-top: 1rem;
+  border-radius: 5px;
+}
+
+.help {
+  margin-top: 1rem;
+  color: #ff3860; 
+}
+
+.icon.is-left {
+  color: #4a4a4a; 
+}
+
+.label {
+  color: #4a4a4a; 
+}
+</style>

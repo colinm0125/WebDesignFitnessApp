@@ -113,13 +113,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.hero-body {
-  background-color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .box {
   padding: 2rem;
   border-radius: 8px;

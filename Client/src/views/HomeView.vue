@@ -21,7 +21,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section has-info">
     <div class="container">
       <div class="columns is-multiline">
         <div class="column is-one-third">
@@ -61,5 +61,9 @@
   background-image: url('@/assets/fitness-bg.jpg');
   background-size: cover;
   background-position: center;
+}
+
+.has-info {
+  background-color: whitesmoke;
 }
 </style>
