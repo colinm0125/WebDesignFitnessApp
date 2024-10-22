@@ -31,6 +31,7 @@ const isOpen = ref(false)
           <RouterLink to="/" class="navbar-item"> Home </RouterLink>
           <RouterLink to="/about" class="navbar-item"> About </RouterLink>
           <RouterLink to="/workout-tracker" class="navbar-item"> Tracker </RouterLink>
+          <RouterLink to="/friends" class="navbar-item"> Friends </RouterLink>
 
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link"> More </a>

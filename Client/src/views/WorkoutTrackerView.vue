@@ -66,7 +66,7 @@
         </div>
       </div>
 
-      <!-- Display Workouts in Social Media-Style Cards -->
+      
       <div class="columns is-multiline">
         <div v-for="(workout, index) in workouts" :key="index" class="column is-half">
           <div class="card social-card">

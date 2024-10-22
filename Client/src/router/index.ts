@@ -4,6 +4,8 @@ import ExpertiseLevelView from '@/views/ExpertiseLevelView.vue'
 import BeginnerView from '../views/workouts/BeginnerView.vue'
 import IntermediateView from '@/views/workouts/IntermediateView.vue'
 import AdvancedView from '@/views/workouts/AdvancedView.vue'
+import WorkoutTrackerView from '@/views/WorkoutTrackerView.vue'
+import FriendActivityView from '@/views/FriendActivityView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +42,11 @@ const router = createRouter({
       path: '/workout-tracker',
       name: 'workout-tracker',
       component: () => import ('../views/WorkoutTrackerView.vue')
+    },
+    {
+      path: '/friends',
+      name: 'Friend Activity',
+      component: () => import ('../views/FriendActivityView.vue')
     }
   ]
 })

@@ -1,0 +1,71 @@
+[
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "profilePicture": "https://randomuser.me/api/portraits/women/67.jpg",
+      "workouts": [
+        {
+          "title": "Morning Run",
+          "type": "Cardio",
+          "date": "2024-10-22",
+          "duration": 45,
+          "location": "Central Park",
+          "picture": "https://picsum.photos/seed/run/600/400"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "profilePicture": "https://randomuser.me/api/portraits/men/67.jpg",
+      "workouts": [
+        {
+          "title": "Chest Day at the Gym",
+          "type": "Strength Training",
+          "date": "2024-10-21",
+          "duration": 60,
+          "location": "Downtown Gym",
+          "picture": "https://picsum.photos/seed/weights/600/400"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Charlie Davis",
+      "profilePicture": "https://randomuser.me/api/portraits/men/69.jpg",
+      "workouts": [
+        {
+          "title": "Yoga Flow",
+          "type": "Yoga",
+          "date": "2024-10-20",
+          "duration": 30,
+          "location": "Home Studio",
+          "picture": "https://picsum.photos/seed/yoga/600/400"
+        },
+        {
+          "title": "Evening Swim",
+          "type": "Swimming",
+          "date": "2024-10-19",
+          "duration": 45,
+          "location": "Community Pool",
+          "picture": "https://picsum.photos/seed/swim/600/400"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Diana Lee",
+      "profilePicture": "https://randomuser.me/api/portraits/women/34.jpg",
+      "workouts": [
+        {
+          "title": "Cycling Adventure",
+          "type": "Cycling",
+          "date": "2024-10-21",
+          "duration": 90,
+          "location": "River Trail",
+          "picture": "https://picsum.photos/seed/cycle/600/400"
+        }
+      ]
+    }
+  ]
+  
