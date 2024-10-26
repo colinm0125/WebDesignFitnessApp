@@ -1,0 +1,36 @@
+[
+    {
+      "id": 1,
+      "username": "alice",
+      "password": "password123",
+      "name": "Alice Johnson",
+      "role": "user",
+      "activities": [
+        { "title": "Morning Run", "date": "2024-10-22", "duration": 45 }
+      ]
+    },
+    {
+      "id": 2,
+      "username": "bob",
+      "password": "password123",
+      "name": "Bob Smith",
+      "role": "user",
+      "activities": [
+        { "title": "Chest Day", "date": "2024-10-21", "duration": 60 },
+        { "title": "Evening Swim", "date": "2024-10-20", "duration": 45 }
+      ]
+    },
+    {
+        "id": 3,
+        "username": "colin",
+        "password": "password123",
+        "name": "Colin McDermott",
+        "role": "admin",
+        "activities": [
+          { "title": "Morning Run", "date": "2024-10-22", "duration": 45 },
+          { "title": "Chest Day", "date": "2024-10-21", "duration": 60 },
+          { "title": "Evening Swim", "date": "2024-10-20", "duration": 45 }
+        ]
+    }
+  ]
+  

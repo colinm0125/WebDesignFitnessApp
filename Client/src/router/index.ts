@@ -47,8 +47,29 @@ const router = createRouter({
       path: '/friends',
       name: 'Friend Activity',
       component: () => import ('../views/FriendActivityView.vue')
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: () => import ('../views/DashboardView.vue')
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: () => import ('../views/AdminView.vue')
     }
   ]
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => { 
+  const userString = localStorage.getItem('.loggedInUser');
+  const user = userString ? JSON.parse(userString) : null;
+  if(to.path === '/admin' && user.role !== 'admin') {
+    next({ path: '/dashboard' });
+  }
+  else {
+    next();
+  }
+});
+
+export default router;
