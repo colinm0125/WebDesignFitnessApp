@@ -17,6 +17,7 @@
                       id="username"
                       v-model="username"
                       placeholder="Enter your username"
+                      required
                     />
                     <span class="icon is-small is-left">
                       <i class="fas fa-user"></i>
@@ -33,6 +34,7 @@
                       id="password"
                       v-model="password"
                       placeholder="Enter your password"
+                      required
                     />
                     <span class="icon is-small is-left">
                       <i class="fas fa-lock"></i>
@@ -73,36 +75,28 @@ export default defineComponent({
     return {
       username: '',
       password: '',
-      users: [], // Store fetched users
       errorMessage: '',
     };
   },
   methods: {
-    async fetchUsers() {
-      try {
-        const response = await fetch('/src/assets/users.json'); // Fetch JSON file
-        this.users = await response.json();
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    },
-
+    // Login method to validate user credentials from localStorage
     login() {
-      const user = this.users.find(
-        (u) => u.username === this.username && u.password === this.password
+      const storedUsers = localStorage.getItem('users');
+      const users = storedUsers ? JSON.parse(storedUsers) : [];
+
+      // Find the user by matching username and password
+      const user = users.find(
+        (u: any) => u.username === this.username && u.password === this.password
       );
 
       if (user) {
-        // Store user session in localStorage
+        // Store the logged-in user in localStorage to maintain session
         localStorage.setItem('loggedInUser', JSON.stringify(user));
         this.$router.push('/dashboard'); // Redirect to dashboard
       } else {
         this.errorMessage = 'Invalid username or password';
       }
     },
-  },
-  mounted() {
-    this.fetchUsers(); // Fetch users when the component mounts
   },
 });
 </script>
