@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ExpertiseLevelView from '@/views/ExpertiseLevelView.vue'
-import BeginnerView from '../views/workouts/BeginnerView.vue'
-import IntermediateView from '@/views/workouts/IntermediateView.vue'
-import AdvancedView from '@/views/workouts/AdvancedView.vue'
-import WorkoutTrackerView from '@/views/WorkoutTrackerView.vue'
-import FriendActivityView from '@/views/FriendActivityView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import ExpertiseLevelView from '@/views/ExpertiseLevelView.vue';
+import BeginnerView from '../views/workouts/BeginnerView.vue';
+import IntermediateView from '@/views/workouts/IntermediateView.vue';
+import AdvancedView from '@/views/workouts/AdvancedView.vue';
+import WorkoutTrackerView from '@/views/WorkoutTrackerView.vue';
+import FriendActivityView from '@/views/FriendActivityView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,63 +13,51 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/AboutView.vue'),
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
     },
     {
       path: '/SignUp',
       name: 'SignUp',
-      component: () => import('../views/SignUpView.vue')
+      component: () => import('../views/SignUpView.vue'),
     },
     {
       path: '/expertise-level',
       name: 'expertise-level',
-      component: () => import ('../views/ExpertiseLevelView.vue')
+      component: () => import('../views/ExpertiseLevelView.vue'),
     },
     {
       path: '/workout-tracker',
       name: 'workout-tracker',
-      component: () => import ('../views/WorkoutTrackerView.vue')
+      component: () => import('../views/WorkoutTrackerView.vue'),
     },
     {
       path: '/friends',
       name: 'Friend Activity',
-      component: () => import ('../views/FriendActivityView.vue')
+      component: () => import('../views/FriendActivityView.vue'),
     },
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: () => import ('../views/DashboardView.vue')
+      component: () => import('../views/DashboardView.vue'),
     },
     {
       path: '/admin',
       name: 'Admin',
-      component: () => import ('../views/AdminView.vue')
-    }
-  ]
+      component: () => import('../views/AdminView.vue'),
+    },
+  ],
 });
 
-router.beforeEach((to, from, next) => { 
-  const userString = localStorage.getItem('.loggedInUser');
-  const user = userString ? JSON.parse(userString) : null;
-  if(to.path === '/admin' && user.role !== 'admin') {
-    next({ path: '/dashboard' });
-  }
-  else {
-    next();
-  }
-});
+
 
 export default router;

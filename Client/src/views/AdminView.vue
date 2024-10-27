@@ -1,156 +1,129 @@
 <template>
-    <section class="admin-section">
-      <div class="container">
-        <h1 class="title has-text-centered">Admin Panel: User Management</h1>
-  
-        <!-- Users Table -->
-        <table class="table is-fullwidth is-hoverable mt-5">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in users" :key="user.id">
-              <td>{{ user.id }}</td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.role }}</td>
-              <td>
-                <button class="button is-info is-small" @click="editUser(user)">Edit</button>
-                <button class="button is-danger is-small" @click="deleteUser(user.id)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-  
-        <!-- User Form -->
-        <div class="box mt-5">
-          <h2 class="subtitle">{{ isEditing ? 'Edit User' : 'Add New User' }}</h2>
-  
-          <form @submit.prevent="saveUser">
-            <div class="field">
-              <label class="label">Username</label>
-              <div class="control">
-                <input class="input" type="text" v-model="userForm.username" placeholder="Enter username" required />
-              </div>
-            </div>
-  
-            <div class="field">
-              <label class="label">Name</label>
-              <div class="control">
-                <input class="input" type="text" v-model="userForm.name" placeholder="Enter name" required />
-              </div>
-            </div>
-  
-            <div class="field">
-              <label class="label">Role</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="userForm.role">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-  
-            <button class="button is-primary mt-3" type="submit">
-              {{ isEditing ? 'Update User' : 'Add User' }}
-            </button>
-          </form>
+  <section class="admin-section">
+    <div class="container">
+      <h1 class="title">User Management</h1>
+
+      <!-- Add User Form -->
+      <form @submit.prevent="addUser" class="box">
+        <h2 class="subtitle">Add New User</h2>
+
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input v-model="newUser.name" class="input" type="text" placeholder="Enter user's name" required />
+          </div>
         </div>
+
+        <div class="field">
+          <label class="label">Username</label>
+          <div class="control">
+            <input v-model="newUser.username" class="input" type="text" placeholder="Enter username" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control">
+            <input v-model="newUser.password" class="input" type="password" placeholder="Enter password" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Role</label>
+          <div class="control">
+            <div class="select">
+              <select v-model="newUser.role" required>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="button is-primary" type="submit">Add User</button>
+      </form>
+
+      <!-- User List -->
+      <div class="box mt-5">
+        <h2 class="subtitle">Current Users</h2>
+        <ul>
+          <li v-for="(user, index) in users" :key="index" class="user-item">
+            <p>
+              <strong>{{ user.name }}</strong> - {{ user.role }}
+              <button class="button is-danger is-small ml-3" @click="removeUser(index)">
+                Delete
+              </button>
+            </p>
+          </li>
+        </ul>
       </div>
-    </section>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        users: [], // List of users
-        isEditing: false, // Track if editing a user
-        userForm: {
-          id: null,
-          username: '',
-          name: '',
-          role: 'user',
-        },
-      };
-    },
-    methods: {
-      async fetchUsers() {
-        try {
-          const response = await fetch('/src/assets/users.json'); // Fetch user data
-          const data = await response.json();
-          this.users = data;
-        } catch (error) {
-          console.error('Error fetching users:', error);
-        }
-      },
-  
-      saveUser() {
-        if (this.isEditing) {
-          // Update the user in the users list
-          const index = this.users.findIndex((u) => u.id === this.userForm.id);
-          if (index !== -1) this.users[index] = { ...this.userForm };
-        } else {
-          // Add a new user with a unique ID
-          const newUser = { ...this.userForm, id: Date.now() };
-          this.users.push(newUser);
-        }
-  
-        this.resetForm(); // Reset the form after saving
-      },
-  
-      editUser(user) {
-        this.isEditing = true;
-        this.userForm = { ...user }; // Populate form with user data
-      },
-  
-      deleteUser(userId) {
-        this.users = this.users.filter((user) => user.id !== userId); // Delete user
-      },
-  
-      resetForm() {
-        this.isEditing = false;
-        this.userForm = {
-          id: null,
-          username: '',
-          name: '',
-          role: 'user',
-        };
-      },
-    },
-    mounted() {
-      this.fetchUsers(); // Fetch users when the component is mounted
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .admin-section {
-    min-height: 100vh;
-    padding: 2rem;
-    background-color: #f5f5f5;
-  }
-  
-  .table {
-    margin-top: 2rem;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .box {
-    margin-top: 2rem;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  </style>
-  
+    </div>
+  </section>
+</template>
+
+<script lang="ts">
+import { reactive } from 'vue';
+
+interface User {
+  name: string;
+  username: string;
+  password: string;
+  role: 'user' | 'admin';
+}
+
+export default {
+  setup() {
+    const users = reactive<User[]>([
+      { name: 'Alice Johnson', username: 'alice', password: 'pass123', role: 'user' },
+      { name: 'Bob Smith', username: 'bob', password: 'password123', role: 'admin' },
+    ]);
+
+    const newUser: User = reactive({
+      name: '',
+      username: '',
+      password: '',
+      role: 'user',
+    });
+
+    const addUser = () => {
+      users.push({ ...newUser }); // Add the new user to the list
+      // Clear the form
+      newUser.name = '';
+      newUser.username = '';
+      newUser.password = '';
+      newUser.role = 'user';
+    };
+
+    const removeUser = (index: number) => {
+      users.splice(index, 1); // Remove the user from the list
+    };
+
+    return { users, newUser, addUser, removeUser };
+  },
+};
+</script>
+
+<style scoped>
+.admin-section {
+  padding: 2rem;
+}
+
+.box {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-item {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  margin-left: 1rem;
+}
+</style>

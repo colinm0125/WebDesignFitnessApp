@@ -42,6 +42,7 @@ const isOpen = ref(false)
               <RouterLink to="/expertise-level" class="navbar-item"> Explore Workouts </RouterLink>
               <hr class="navbar-divider" />
               <a class="navbar-item"> Report an issue </a>
+              <RouterLink to="/admin" class="navbar-item"> Admin </RouterLink>
             </div>
           </div>
         </div>
