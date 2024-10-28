@@ -39,7 +39,7 @@ jobs:
       
       - name: build vue    
         run: |
-          cd client  
+          cd Client  
           pnpm install
           pnpm run build
 
