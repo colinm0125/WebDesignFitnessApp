@@ -1,42 +1,58 @@
-const { getConnection } = require('./supabase')
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config({path: '../.env'});
+/**
+ * @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient
+ */
 
-const UserModel = {
-    async getAllUsers() {  
-        const supabase = getConnection()
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY);
+
+module.exports = {
+    async getAllUsers() {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*');
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    },
+    async getUserById(id) {
         const { data, error } = await supabase
             .from('users')
             .select('*')
-        if (error) throw new Error(error.message)
+            .eq('id', id);
+        if (error) {
+            throw new Error(error.message);
+        }
         return data;
     },
-
-    async getUserById(userId) {
-        const supabase = getConnection();
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', userId)
-        if (error) throw new Error(error.message)
-        return data;
-    },
-
     async createUser(user) {
-        const supabase = getConnection();
         const { data, error } = await supabase
             .from('users')
-            .insert(user)
-        if (error) throw new Error(error.message)
+            .insert(user);
+        if (error) {
+            throw new Error(error.message);
+        }
         return data;
     },
-
-    async deleteUser(userId) {
-        const supabase = getConnection();
+    async updateUser(id, user) {
+        const { data, error } = await supabase
+            .from('users')
+            .update(user)
+            .eq('id', id);
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    },
+    async deleteUser(id) {
         const { data, error } = await supabase
             .from('users')
             .delete()
-            .eq('id', userId)
-        if (error) throw new Error(error.message)
+            .eq('id', id);
+        if (error) {
+            throw new Error(error.message);
+        }
         return data;
     }
 };
-module.exports = UserModel;
