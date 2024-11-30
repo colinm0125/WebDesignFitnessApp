@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
-
+const supabase = require('./model/supabase').getConnection;
 
 
 dotenv.config();
