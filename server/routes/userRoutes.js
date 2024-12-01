@@ -7,8 +7,35 @@ const { supabase } = require('../model/supabase');
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUserById);
 router.post('/', userController.createUser);
-router.put('/:id', userController.updateUser);
 router.delete('/:id', userController.deleteUser);
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, role } = req.body;
+
+  if (!name || !role) {
+    return res.status(400).json({ error: 'Name and role are required.' });
+  }
+
+  try {
+    console.log(`Updating user ID ${id} with`, { name, role });
+
+    const { data, error } = await supabase
+      .from('users')
+      .update({ name, role })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Supabase error:', error.message);
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.status(200).json(data);
+  } catch (err) {
+    console.error('Unhandled server error:', err.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 
 

@@ -154,7 +154,7 @@ export default {
 
     const removeUser = async (id: number) => {
       try {
-        const response = await fetch(`/users/${id}`, { method: 'DELETE' });
+        const response = await fetch(`http://localhost:3000/users/${id}`, { method: 'DELETE' });
         if (!response.ok) throw new Error('Failed to delete user');
         await fetchUsers();
       } catch (error) {
@@ -182,22 +182,36 @@ export default {
     const closeEditUserModal = () => (isEditUserModalOpen.value = false);
 
     const saveUserEdit = async () => {
-      try {
-        const response = await fetch(`/api/users/${editedUser.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(editedUser),
-        });
+  try {
+    if (!editedUser.name || !editedUser.role) {
+      alert('Name and role are required.');
+      return;
+    }
 
-        if (!response.ok) throw new Error('Failed to update user');
-
-        await fetchUsers();
-        closeEditUserModal();
-      } catch (error) {
-        console.error('Error saving user edit:', error);
-        alert(`Error saving user edit: ${(error as Error).message}`);
-      }
+    const payload = {
+      name: editedUser.name,
+      role: editedUser.role,
     };
+
+    console.log('Payload being sent to backend:', payload);
+
+    const response = await fetch(`http://localhost:3000/users/${editedUser.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error(`Failed to update user with ID ${editedUser.id}`);
+
+    await fetchUsers();
+    closeEditUserModal();
+    alert('User updated successfully!');
+  } catch (error) {
+    console.error('Error saving user edit:', error);
+    alert(`Error saving user edit: ${(error as Error).message}`);
+  }
+};
+
 
     onMounted(fetchUsers);
 
