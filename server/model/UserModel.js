@@ -27,6 +27,7 @@ module.exports = {
         return data;
     },
     async createUser(user) {
+        const { id, ...userNoId } = user; //Destructure the ID from the user object
         const { data, error } = await supabase
             .from('users')
             .insert(user);

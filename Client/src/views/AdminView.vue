@@ -11,8 +11,8 @@
           <li v-for="(user, index) in users" :key="user.id" class="user-item">
             <p>
               <strong>{{ user.name }}</strong> - {{ user.role }}
-              <button class="button is-info is-small ml-3" @click="openEditUserModal(index)">Edit</button>
-              <button class="button is-danger is-small ml-3" @click="removeUser(index)">Delete</button>
+              <button class="button is-info is-small ml-3" @click="openEditUserModal(user)">Edit</button>
+              <button class="button is-danger is-small ml-3" @click="removeUser(user.id)">Delete</button>
             </p>
           </li>
         </ul>
@@ -33,21 +33,18 @@
                   <input class="input" type="text" v-model="newUser.name" placeholder="Enter name" required />
                 </div>
               </div>
-
               <div class="field">
                 <label class="label">Username</label>
                 <div class="control">
                   <input class="input" type="text" v-model="newUser.username" placeholder="Enter username" required />
                 </div>
               </div>
-
               <div class="field">
                 <label class="label">Password</label>
                 <div class="control">
                   <input class="input" type="password" v-model="newUser.password" placeholder="Enter password" required />
                 </div>
               </div>
-
               <div class="field">
                 <label class="label">Role</label>
                 <div class="control">
@@ -59,7 +56,6 @@
                   </div>
                 </div>
               </div>
-
               <button class="button is-success" type="submit">Add User</button>
             </form>
           </section>
@@ -81,7 +77,6 @@
                   <input class="input" type="text" v-model="editedUser.name" required />
                 </div>
               </div>
-
               <div class="field">
                 <label class="label">Role</label>
                 <div class="control">
@@ -93,7 +88,6 @@
                   </div>
                 </div>
               </div>
-
               <button class="button is-success" type="submit">Save Changes</button>
             </form>
           </section>
@@ -104,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref, onMounted } from 'vue';
+import { ref, reactive, onMounted, nextTick } from 'vue';
 
 interface User {
   id: number;
@@ -116,70 +110,96 @@ interface User {
 
 export default {
   setup() {
-    const users = reactive<User[]>([]);
-    const newUser = reactive<User>({ id: 0, username: '', password: '', name: '', role: 'user' });
+    const users = ref<User[]>([]);
+    const newUser = reactive<Omit<User,'id'>>({username: '', password: '', name: '', role: 'user' });
     const editedUser = reactive<User>({ id: 0, username: '', password: '', name: '', role: 'user' });
     const isAddUserModalOpen = ref(false);
     const isEditUserModalOpen = ref(false);
-    let editUserIndex = -1;
 
-    const loadUsers = () => {
-      const storedUsers = localStorage.getItem('users');
-      if (storedUsers) {
-        users.push(...JSON.parse(storedUsers));
-      }
-      ensureAdminUser();
-    };
-
-    const ensureAdminUser = () => {
-      const colin = users.find((user) => user.username === 'colin');
-      if (!colin) {
-        const adminUser: User = {
-          id: Date.now(),
-          username: 'colin',
-          password: 'password123',
-          name: 'Colin McDermott',
-          role: 'admin',
-        };
-        users.push(adminUser);
-        saveUsers();
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/users');
+        if (!response.ok) throw new Error('Failed to fetch users');
+        users.value = await response.json();
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        alert(`Error fetching users: ${(error as Error).message}`);
       }
     };
 
-    const saveUsers = () => {
-      localStorage.setItem('users', JSON.stringify(users));
+    const addUser = async () => {
+      if (users.value.some((user) => user.username === newUser.username)) {
+        alert('This username is already taken.');
+        return;
+      }
+
+      try {
+        const userToAdd = { ...newUser };
+
+        const response = await fetch('http://localhost:3000/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newUser),
+        });
+
+        if (!response.ok) throw new Error('Failed to add user');
+
+        await fetchUsers();
+        closeAddUserModal();
+      } catch (error) {
+        console.error('Error adding user:', error);
+        alert(`Error adding user: ${(error as Error).message}`);
+      }
     };
 
-    const addUser = () => {
-      newUser.id = Date.now();
-      users.push({ ...newUser });
-      saveUsers();
-      closeAddUserModal();
+    const removeUser = async (id: number) => {
+      try {
+        const response = await fetch(`/users/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Failed to delete user');
+        await fetchUsers();
+      } catch (error) {
+        console.error('Error removing user:', error);
+        alert(`Error removing user: ${(error as Error).message}`);
+      }
     };
 
-    const removeUser = (index: number) => {
-      users.splice(index, 1);
-      saveUsers();
+    const openAddUserModal = () => {
+      newUser.username = '';
+      newUser.password = '';
+      newUser.name = '';
+      newUser.role = 'user';
+      isAddUserModalOpen.value = true;
+      nextTick(() => (document.querySelector('#addUserModal input') as HTMLInputElement)?.focus());
     };
 
-    const openAddUserModal = () => (isAddUserModalOpen.value = true);
     const closeAddUserModal = () => (isAddUserModalOpen.value = false);
 
-    const openEditUserModal = (index: number) => {
-      editUserIndex = index;
-      Object.assign(editedUser, users[index]);
+    const openEditUserModal = (user: User) => {
+      Object.assign(editedUser, user);
       isEditUserModalOpen.value = true;
     };
 
     const closeEditUserModal = () => (isEditUserModalOpen.value = false);
 
-    const saveUserEdit = () => {
-      Object.assign(users[editUserIndex], editedUser);
-      saveUsers();
-      closeEditUserModal();
+    const saveUserEdit = async () => {
+      try {
+        const response = await fetch(`/api/users/${editedUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(editedUser),
+        });
+
+        if (!response.ok) throw new Error('Failed to update user');
+
+        await fetchUsers();
+        closeEditUserModal();
+      } catch (error) {
+        console.error('Error saving user edit:', error);
+        alert(`Error saving user edit: ${(error as Error).message}`);
+      }
     };
 
-    onMounted(loadUsers);
+    onMounted(fetchUsers);
 
     return {
       users,
@@ -198,28 +218,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.admin-section {
-  padding: 2rem;
-}
-
-.box {
-  margin-top: 1rem;
-  padding: 1.5rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.user-item {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-button {
-  margin-left: 1rem;
-}
-</style>
