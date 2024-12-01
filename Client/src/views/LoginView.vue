@@ -68,35 +68,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  data() {
-    return {
-      username: '',
-      password: '',
-      errorMessage: '',
-    };
-  },
-  methods: {
-    // Login method to validate user credentials from localStorage
-    login() {
-      const storedUsers = localStorage.getItem('users');
-      const users = storedUsers ? JSON.parse(storedUsers) : [];
+  setup() {
+    const router = useRouter();
+    const username = ref('');
+    const password = ref('');
+    const errorMessage = ref('');
 
-      // Find the user by matching username and password
-      const user = users.find(
-        (u: any) => u.username === this.username && u.password === this.password
-      );
+    const login = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: username.value, password: password.value }),
+        });
 
-      if (user) {
-        // Store the logged-in user in localStorage to maintain session
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-        this.$router.push('/dashboard'); // Redirect to dashboard
-      } else {
-        this.errorMessage = 'Invalid username or password';
+        if (response.ok) {
+          const user = await response.json();
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+          router.push('/dashboard');
+        } else {
+          const errorData = await response.json();
+          errorMessage.value = errorData.error || 'Invalid username or password';
+        }
+      } catch (error) {
+        errorMessage.value = 'Error connecting to the server';
+        console.error(error);
       }
-    },
+    };
+
+    return {
+      username,
+      password,
+      errorMessage,
+      login,
+    };
   },
 });
 </script>

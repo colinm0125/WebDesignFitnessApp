@@ -1,8 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed, onMounted } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
 
-const isOpen = ref(false)
+// Reactive state for the menu
+const isOpen = ref(false);
+
+// Reactive state for the logged-in user
+const loggedInUser = ref(null);
+
+// Check for logged-in user from localStorage
+onMounted(() => {
+  const storedUser = localStorage.getItem('loggedInUser');
+  if (storedUser) {
+    loggedInUser.value = JSON.parse(storedUser);
+  }
+});
+
+// Logout function
+const router = useRouter();
+const logout = () => {
+  localStorage.removeItem('loggedInUser');
+  loggedInUser.value = null;
+  router.push('/login');
+};
 </script>
 
 <template>
@@ -53,9 +73,19 @@ const isOpen = ref(false)
               <a class="button is-light">
                 <RouterLink to="/signup"> Sign Up </RouterLink>
               </a>
-              <a class="button is-light"> 
-                <RouterLink to="/login"> Log in </RouterLink>
-              </a>
+
+              <template v-if="loggedInUser">
+                <a class="button is-primary">
+                  <RouterLink to="/dashboard"> Dashboard </RouterLink>
+                </a>
+                <a class="button is-light" @click="logout"> Logout </a>
+              </template>
+
+              <template v-else>
+                <a class="button is-light">
+                  <RouterLink to="/login"> Log in </RouterLink>
+                </a>
+              </template>
             </div>
           </div>
         </div>
@@ -69,5 +99,4 @@ const isOpen = ref(false)
   font-weight: bold;
   border-bottom: 2px solid blue;
 }
-
 </style>
