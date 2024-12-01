@@ -14,23 +14,9 @@
                                         class="input"
                                         type="text"
                                         id="name"
-                                        v-model="name"
+                                        v-model="user.name"
                                         placeholder="Enter your name"
-                                    />
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="label" for="username">Username</label>
-                                <div class="control has-icons-left">
-                                    <input
-                                        class="input"
-                                        type="text"
-                                        id="username"
-                                        v-model="username"
-                                        placeholder="Create username"
+                                        required
                                     />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-user"></i>
@@ -39,17 +25,18 @@
                             </div>
 
                             <div class="field">
-                                <label class="label" for="email">Email</label>
+                                <label class="label" for="username">Username</label>
                                 <div class="control has-icons-left">
                                     <input
                                         class="input"
-                                        type="email"
-                                        id="email"
-                                        v-model="email"
-                                        placeholder="Enter your email"
+                                        type="text"
+                                        id="username"
+                                        v-model="user.username"
+                                        placeholder="Create username"
+                                        required
                                     />
                                     <span class="icon is-small is-left">
-                                        <i class="fas fa-envelope"></i>
+                                        <i class="fas fa-user"></i>
                                     </span>
                                 </div>
                             </div>
@@ -61,8 +48,9 @@
                                         class="input"
                                         type="password"
                                         id="password"
-                                        v-model="password"
-                                        placeholder="Choose a Password"
+                                        v-model="user.password"
+                                        placeholder="Choose a password"
+                                        required
                                     />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
@@ -77,8 +65,9 @@
                                         class="input"
                                         type="password"
                                         id="confirmPassword"
-                                        v-model="confirmPassword"
+                                        v-model="user.confirmPassword"
                                         placeholder="Confirm your password"
+                                        required
                                     />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
@@ -103,69 +92,72 @@
 </template>
 
 <script lang="ts">
-import { SignUpViewModel } from '../ViewModels/SignUpViewModel';
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+interface User {
+    name: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+}
 
 export default defineComponent({
     setup() {
-        const viewModel = new SignUpViewModel();
-
-        const name = computed({
-            get: () => viewModel.name,
-            set: (value) => { viewModel.name = value; }
+        const user = reactive<User>({
+            name: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
         });
 
-        const username = computed({
-            get: () => viewModel.username,
-            set: (value) => { viewModel.username = value; }
-        });
-
-        const email = computed({
-            get: () => viewModel.email,
-            set: (value) => { viewModel.email = value; }
-        });
-
-        const password = computed({
-            get: () => viewModel.password,
-            set: (value) => { viewModel.password = value; }
-        });
-
-        const confirmPassword = computed({
-            get: () => viewModel.confirmPassword,
-            set: (value) => { viewModel.confirmPassword = value; }
-        });
-
-        const errorMessage = computed(() => viewModel.error);
+        const errorMessage = reactive<string>('');
+        const router = useRouter();
 
         const signUp = async () => {
-            if (password.value !== confirmPassword.value) {
-                viewModel.error = 'Passwords do not match';
+            if (user.password !== user.confirmPassword) {
+                errorMessage.value = 'Passwords do not match';
                 return;
             }
-            await viewModel.signUp();
+
+            try {
+                const response = await fetch('http://localhost:3000/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: user.name,
+                        username: user.username,
+                        password: user.password,
+                        role: 'user',
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to sign up. Please try again.');
+                }
+
+                const newUser = await response.json();
+
+                // Save the logged-in user in localStorage
+                localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+
+                // Redirect to the home page
+                router.push('/');
+            } catch (error: any) {
+                errorMessage.value = error.message;
+            }
         };
 
         return {
-            name,
-            username,
-            email,
-            password,
-            confirmPassword,
+            user,
             errorMessage,
-            signUp
+            signUp,
         };
-    }
+    },
 });
 </script>
 
 <style scoped>
-.hero-body {
-  background-color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .box {
   padding: 2rem;
   border-radius: 8px;
@@ -182,7 +174,6 @@ export default defineComponent({
   color: #4a4a4a;            
   border: 1px solid #ddd;     
   border-radius: 5px;         
-  box-shadow: none;           
 }
 
 .input::placeholder {

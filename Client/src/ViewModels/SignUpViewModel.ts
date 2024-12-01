@@ -3,6 +3,7 @@ import { reactive } from "vue";
 export class SignUpViewModel {
     public state: {
         name: string,
+        username: string,
         email: string,
         password: string,
         confirmPassword: string,
@@ -13,6 +14,7 @@ export class SignUpViewModel {
     constructor() {
         this.state = reactive({
             name: "",
+            username: "",
             email: "",
             password: "",
             confirmPassword: "",
@@ -25,6 +27,13 @@ export class SignUpViewModel {
     }
     set name(value) {
         this.state.name = value;
+    }
+
+    get username() {
+        return this.state.username;
+    }
+    set username(value) {
+        this.state.username = value;
     }
 
     get email() {
