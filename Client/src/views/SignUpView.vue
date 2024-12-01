@@ -6,6 +6,22 @@
                     <div class="box">
                         <h1 class="title has-text-centered">Sign Up</h1>
                         <form @submit.prevent="signUp">
+
+                            <div class="field">
+                                <label class="label" for="name">Name</label>
+                                <div class="control has-icons-left">
+                                    <input
+                                        class="input"
+                                        type="text"
+                                        id="name"
+                                        v-model="name"
+                                        placeholder="Enter your name"
+                                    />
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="field">
                                 <label class="label" for="username">Username</label>
                                 <div class="control has-icons-left">
@@ -94,6 +110,11 @@ export default defineComponent({
     setup() {
         const viewModel = new SignUpViewModel();
 
+        const name = computed({
+            get: () => viewModel.name,
+            set: (value) => { viewModel.name = value; }
+        });
+
         const username = computed({
             get: () => viewModel.username,
             set: (value) => { viewModel.username = value; }
@@ -117,10 +138,15 @@ export default defineComponent({
         const errorMessage = computed(() => viewModel.error);
 
         const signUp = async () => {
+            if (password.value !== confirmPassword.value) {
+                viewModel.error = 'Passwords do not match';
+                return;
+            }
             await viewModel.signUp();
         };
 
         return {
+            name,
             username,
             email,
             password,
