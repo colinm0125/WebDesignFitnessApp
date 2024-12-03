@@ -1,90 +1,97 @@
-//Model to habndle the CRUD opeartations on the Posted workouts database.
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config({ path: '../.env' });
 
-const {createClient}=require('@supabase/supabase-js');
-require('dotenv').config({path:'../.env'});
-/**
- * @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient
- */
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY);
 
-const supabase=createClient(process.env.SUPABASE_URL,process.env.SUPABASE_SECRET_KEY);
-
-module.exports={
-
-    async getAllWorkouts(){
-        const {data,error}=await supabase
-        .from('workouts')
-        .select('*');
-        if(error){
-            throw new Error(error.message);
+module.exports = {
+    async getAllWorkouts() {
+        try {
+            const { data, error } = await supabase
+                .from('workouts')
+                .select('*');
+            if (error) throw new Error(error.message);
+            return data;
+        } catch (err) {
+            console.error('Error fetching all workouts:', err.message);
+            throw err;
         }
-        return data;
     },
 
-    async getWorkoutById(id){
-        const {data,error}=await supabase
-        .from('workouts')
-        .select('*')
-        .eq('id',id);
-        if(error){
-            throw new Error(error.message);
+    async getWorkoutById(id) {
+        try {
+            const { data, error } = await supabase
+                .from('workouts')
+                .select('*')
+                .eq('id', id);
+            if (error) throw new Error(error.message);
+            return data;
+        } catch (err) {
+            console.error('Error fetching workout by ID:', err.message);
+            throw err;
         }
-        return data;
     },
 
-    async createWorkout(workout){
-        const {id,...workoutNoId}=workout;
-        const {data,error}=await supabase
-        .from('workouts')
-        .insert(workout);
-        if(error){
-            throw new Error(error.message);
-        }
-        return data;
-    },
-    
-    async updateWorkout(id,workout){
-        const {data,error}=await supabase
-        .from('workouts')
-        .update([
-            {
-                name:workout.name,
-                description:workout.description,
-                sets:workout.sets,
-                reps:workout.reps,
-                weight:workout.weight,
-                userId:workout.userId
+    async createWorkout(workout) {
+        try {
+            console.log('Creating workout:', workout); // Debugging log
+            if (!workout.user_id || !workout.title || !workout.date) {
+                throw new Error('Missing required fields: user_id, title, and date are mandatory.');
             }
-        ])
-        .eq('id',id);
-        if(error){
-            throw new Error(error.message);
+            const { id, created_at, ...workoutData } = workout; // Exclude `id` and `created_at`
+            const { data, error } = await supabase
+                .from('workouts')
+                .insert(workoutData);
+            if (error) throw new Error(error.message);
+            console.log('Workout created:', data); // Debugging log
+            return data;
+        } catch (err) {
+            console.error('Error creating workout:', err.message);
+            throw err;
         }
-        return data;
     },
 
-    async deleteWorkout(id){
-        const {data,error}=await supabase
-        .from('workouts')
-        .delete()
-        .eq('id',id);
-        if(error){
-            throw new Error(error.message);
+    async updateWorkout(id, workout) {
+        try {
+            console.log('Updating workout:', id, workout); // Debugging log
+            const { id: workoutId, created_at, ...updateData } = workout; // Exclude `id` and `created_at`
+            const { data, error } = await supabase
+                .from('workouts')
+                .update(updateData)
+                .eq('id', id);
+            if (error) throw new Error(error.message);
+            console.log('Workout updated:', data); // Debugging log
+            return data;
+        } catch (err) {
+            console.error('Error updating workout:', err.message);
+            throw err;
         }
-        return data;
     },
 
-    async getWorkoutsByUserId(userId){
-        const {data,error}=await supabase
-        .from('workouts')
-        .select('*')
-        .eq('userId',userId);
-        if(error){
-            throw new Error(error.message);
+    async deleteWorkout(id) {
+        try {
+            const { data, error } = await supabase
+                .from('workouts')
+                .delete()
+                .eq('id', id);
+            if (error) throw new Error(error.message);
+            return data;
+        } catch (err) {
+            console.error('Error deleting workout:', err.message);
+            throw err;
         }
-        return data;
+    },
+
+    async getWorkoutsByUserId(userId) {
+        try {
+            const { data, error } = await supabase
+                .from('workouts')
+                .select('*')
+                .eq('user_id', userId);
+            if (error) throw new Error(error.message);
+            return data;
+        } catch (err) {
+            console.error('Error fetching workouts by user ID:', err.message);
+            throw err;
+        }
     }
-
 };
-
-
-
