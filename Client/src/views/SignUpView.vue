@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface User {
@@ -111,7 +111,7 @@ export default defineComponent({
             confirmPassword: '',
         });
 
-        const errorMessage = reactive<string>('');
+        const errorMessage = ref<string>('');
         const router = useRouter();
 
         const signUp = async () => {

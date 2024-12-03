@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON request bodies
+app.use(express.static(__dirname + '/public')); // Serve static files from the 'public' directory
 
 // Routes
 app.use('/users', userRoutes); // Prefix all user-related routes with '/users'
