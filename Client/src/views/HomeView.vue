@@ -58,7 +58,6 @@
 
 <style scoped>
 .hero-body {
-  background-image: url('@/assets/fitness-bg.jpg');
   background-size: cover;
   background-position: center;
 }
