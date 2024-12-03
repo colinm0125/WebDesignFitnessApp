@@ -1,4 +1,4 @@
-import { reactive } from 'vue';
+import { ref } from 'vue';
 
 export interface User {
   id: number;
@@ -16,16 +16,16 @@ interface UserStore {
 }
 
 
-export const userStore: UserStore = reactive({
-  user: null,
+export const userStore = {
+  user: ref<User | null>(null),
 
   setUser(user: User) {
     console.log('User set:', user); 
-    this.user = user;
+    this.user.value = user;
   },
 
   clearUser() {
     console.log('User cleared'); // Debug log
-    this.user = null;
+    this.user.value = null;
   },
-});
+};
