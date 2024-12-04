@@ -29,9 +29,9 @@ const router = createRouter({
       component: () => import('../views/WorkoutTrackerView.vue'),
     },
     {
-      path: '/friends',
-      name: 'Friend Activity',
-      component: () => import('../views/FriendActivityView.vue'),
+      path: '/friends-workouts',
+      name: 'Friends',
+      component: () => import('../views/FriendsWorkoutsView.vue'),
     },
     {
       path: '/dashboard',
