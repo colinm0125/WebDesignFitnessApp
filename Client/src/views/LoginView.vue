@@ -80,23 +80,29 @@ export default defineComponent({
 
     const login = async () => {
       try {
+        console.log('Attempting to login with:', { username: username.value, password: password.value });
+
         const response = await fetch('http://localhost:3000/users/login', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({ username: username.value, password: password.value }),
         });
 
-        if (response.ok) {
-          const user = await response.json();
-          localStorage.setItem('loggedInUser', JSON.stringify(user));
-          router.push('/dashboard');
-        } else {
-          const errorData = await response.json();
-          errorMessage.value = errorData.error || 'Invalid username or password';
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorMessage.value = data.error;
+          console.error('Login error:', data.error);
+          return;
         }
+
+        localStorage.setItem('token', data.token);
+        router.push('/workout-tracker');
       } catch (error) {
         errorMessage.value = 'Error connecting to the server';
-        console.error(error);
+        console.error('Login error:', error);
       }
     };
 

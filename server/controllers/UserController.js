@@ -1,4 +1,6 @@
 const userModels = require('../model/UserModel');
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     async getAllUsers(req, res) {
@@ -25,7 +27,7 @@ module.exports = {
             res.status(201).json(newUser);
         } catch (error) {
             res.status(500).json({ error: error.message });
-        }
+  }
     },
     async updateUser(req, res) {
         try {
@@ -35,13 +37,38 @@ module.exports = {
             res.status(200).json(updatedUser);
         } catch (error) {
             res.status(500).json({ error: error.message });
-        }
+  }
     },
     async deleteUser(req, res) {
         try {
             const id = req.params.id;
             const deletedUser = await userModels.deleteUser(id);
             res.status(200).json(deletedUser);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    async login(req, res) {
+        try {
+            const { username, password } = req.body;
+            const user = await userModels.getUserByUsername(username);
+
+            if (!user) {
+                return res.status(400).json({ error: 'Invalid username or password.' });
+            }
+
+            const validPassword = await argon2.verify(user.password, password);
+
+            if (!validPassword) {
+                return res.status(400).json({ error: 'Invalid username or password.' });
+            }
+
+            const token = jwt.sign({ id: user.id, role: user.role }, process.env.SUPABASE_JWT_SECRET, {
+                expiresIn: '1h'
+            });
+
+            res.status(200).json({ token });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

@@ -1,7 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config({ path: '../.env' });
+//require('dotenv').config({ path: '../.env' });
 const argon2 = require('argon2');
-
+const { get } = require('../routes/userRoutes');
+console.log('Supabase URL:', process.env.SUPABASE_URL);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY);
 
 module.exports = {
@@ -71,5 +72,16 @@ module.exports = {
             throw new Error(error.message);
         }
         return data;
+    },
+
+    async getUserByUsername(username) {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username);
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data[0];
     }
 };
