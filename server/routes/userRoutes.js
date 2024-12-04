@@ -1,27 +1,25 @@
 const express = require('express');
 const userController = require('../controllers/UserController');
 const router = express.Router();
+const auth = require('../middlewares/auth');
 
 // CRUD operations
-router.get('/', userController.getAllUsers);
-router.get('/:id', userController.getUserById);
-router.post('/', userController.createUser);
-router.delete('/:id', userController.deleteUser);
-router.put('/:id', userController.updateUser);
+router.get('/', auth, userController.getAllUsers);
+router.get('/:id', auth, userController.getUserById);
+router.post('/', auth, userController.createUser);
+router.delete('/:id', auth, userController.deleteUser);
+router.put('/:id', auth, userController.updateUser);
 
 // Login Functionality
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    console.log('Received login request:', { username, password }); // Debug log
-
     if (!username || !password) {
-        console.log('Missing username or password'); // Debug log
         return res.status(400).json({ error: 'Username and password are required' });
     }
 
     try {
-        console.log('Querying Supabase for username:', username); // Debug log
+        console.log('Received login request:', { username, password }); // Debug log
         const { data: users, error } = await supabase
             .from('users')
             .select('*')
@@ -47,11 +45,19 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
+        // Generate JWT
+        const token = jwt.sign(
+            { id: user.id, username: user.username, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
         res.json({
             id: user.id,
             username: user.username,
             name: user.name,
             role: user.role,
+            token,
         });
     } catch (err) {
         console.error('Unhandled server error:', err.message); // Debug log

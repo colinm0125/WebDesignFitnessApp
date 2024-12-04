@@ -15,7 +15,7 @@
                       class="input"
                       type="text"
                       id="username"
-                      v-model="username"
+                      v-model="viewModel.username"
                       placeholder="Enter your username"
                       required
                     />
@@ -32,7 +32,7 @@
                       class="input"
                       type="password"
                       id="password"
-                      v-model="password"
+                      v-model="viewModel.password"
                       placeholder="Enter your password"
                       required
                     />
@@ -55,8 +55,8 @@
                   </div>
                 </div>
 
-                <p v-if="errorMessage" class="help is-danger has-text-centered">
-                  {{ errorMessage }}
+                <p v-if="viewModel.error" class="help is-danger has-text-centered">
+                  {{ viewModel.error }}
                 </p>
               </form>
             </div>
@@ -70,40 +70,22 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { LoginViewModel } from '../ViewModels/LoginViewModel';
 
 export default defineComponent({
   setup() {
     const router = useRouter();
-    const username = ref('');
-    const password = ref('');
-    const errorMessage = ref('');
+    const viewModel = ref(new LoginViewModel());
 
     const login = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/users/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: username.value, password: password.value }),
-        });
-
-        if (response.ok) {
-          const user = await response.json();
-          localStorage.setItem('loggedInUser', JSON.stringify(user));
-          router.push('/dashboard');
-        } else {
-          const errorData = await response.json();
-          errorMessage.value = errorData.error || 'Invalid username or password';
-        }
-      } catch (error) {
-        errorMessage.value = 'Error connecting to the server';
-        console.error(error);
+      await viewModel.value.login();
+      if (!viewModel.value.error) {
+        router.push('/workout-tracker');
       }
     };
 
     return {
-      username,
-      password,
-      errorMessage,
+      viewModel,
       login,
     };
   },
