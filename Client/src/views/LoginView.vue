@@ -78,9 +78,30 @@ export default defineComponent({
     const viewModel = ref(new LoginViewModel());
 
     const login = async () => {
-      await viewModel.value.login();
-      if (!viewModel.value.error) {
+      try {
+        console.log('Attempting to login with:', { username: username.value, password: password.value });
+
+        const response = await fetch('http://localhost:3000/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: username.value, password: password.value }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorMessage.value = data.error;
+          console.error('Login error:', data.error);
+          return;
+        }
+
+        localStorage.setItem('token', data.token);
         router.push('/workout-tracker');
+      } catch (error) {
+        errorMessage.value = 'Error connecting to the server';
+        console.error('Login error:', error);
       }
     };
 

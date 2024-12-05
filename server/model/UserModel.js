@@ -1,8 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config({ path: '../.env' });
+//require('dotenv').config({ path: '../.env' });
 const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
-
+const { get } = require('../routes/userRoutes');
+console.log('Supabase URL:', process.env.SUPABASE_URL);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY);
 
 module.exports = {
@@ -73,40 +73,15 @@ module.exports = {
         }
         return data;
     },
-    async login(username, password) {
-        try {
-            console.log('Attempting to login with:', { username, password });
-            const { data: users, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('username', username);
 
-            if (error) {
-                throw new Error(error.message);
-            }
-
-            if (!users || users.length === 0) {
-                return { success: false, message: 'Invalid username or password' };
-            }
-
-            const user = users[0];
-            const isPasswordValid = await argon2.verify(user.password, password);
-
-            if (!isPasswordValid) {
-                return { success: false, message: 'Invalid username or password' };
-            }
-
-            // Generate JWT
-            const token = jwt.sign(
-                { id: user.id, username: user.username, role: user.role },
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' }
-            );
-
-            return { success: true, token, user };
-        } catch (error) {
-            console.error('Login error:', error);
-            return { success: false, message: 'Error connecting to the server' };
+    async getUserByUsername(username) {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username);
+        if (error) {
+            throw new Error(error.message);
         }
+        return data[0];
     }
 };
