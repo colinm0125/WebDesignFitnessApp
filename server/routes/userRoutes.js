@@ -4,11 +4,11 @@ const router = express.Router();
 const { login } = require('../controllers/UserController');
 
 // CRUD operations
-router.get('/', auth, userController.getAllUsers);
-router.get('/:id', auth, userController.getUserById);
-router.post('/', auth, userController.createUser);
-router.delete('/:id', auth, userController.deleteUser);
-router.put('/:id', auth, userController.updateUser);
+router.get('/', userController.getAllUsers);
+router.get('/:id', userController.getUserById);
+router.post('/', userController.createUser);
+router.delete('/:id', userController.deleteUser);
+router.put('/:id', userController.updateUser);
 
 router.post('/login', login);
 
