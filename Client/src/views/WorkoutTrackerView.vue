@@ -3,6 +3,24 @@
     <div class="container">
       <h1 class="title has-text-centered">Workout Tracker</h1>
 
+      <!-- Search bar at the top of the page -->
+      <section>
+        <o-field label="Search for friends">
+          <o-autocomplete
+            v-model="query"
+            :data="suggestions"
+            @input="fetchSuggestions"
+            placeholder="Type to search..."
+            clearable
+            open-on-focus
+          >
+            <template #empty>No results found</template>
+          </o-autocomplete>
+        </o-field>
+        <p><b>Selected:</b> {{ query }}</p>
+        
+      </section>
+
       <!-- Button to open the Add Workout Modal -->
       <button class="button is-primary mb-5" @click="openModal">Add Workout</button>
 
@@ -131,7 +149,14 @@
 </template>
 
 <script>
+import AutoComplete from "@/components/AutoComplete.vue";
+import Modal from "@/components/Modal.vue";
+
 export default {
+  components: {
+    AutoComplete,
+    Modal,
+  },
   data() {
     return {
       isModalOpen: false,
@@ -148,6 +173,26 @@ export default {
     };
   },
   methods: {
+    openModal() {
+      this.newWorkout = {
+        title: "",
+        date: "",
+        duration: "",
+        location: "",
+        type: "",
+      };
+      this.isModalOpen = true;
+    },
+    closeModal() {
+      this.isModalOpen = false;
+    },
+    openEditModal(workout) {
+      this.editedWorkout = { ...workout };
+      this.isEditModalOpen = true;
+    },
+    closeEditModal() {
+      this.isEditModalOpen = false;
+    },
     async fetchWorkouts() {
       try {
         console.log("Fetching workouts...");
@@ -187,26 +232,6 @@ export default {
       } catch (error) {
         console.error("Error deleting workout:", error);
       }
-    },
-    openModal() {
-      this.newWorkout = {
-        title: "",
-        date: "",
-        duration: "",
-        location: "",
-        type: "",
-      };
-      this.isModalOpen = true;
-    },
-    closeModal() {
-      this.isModalOpen = false;
-    },
-    openEditModal(workout) {
-      this.editedWorkout = { ...workout };
-      this.isEditModalOpen = true;
-    },
-    closeEditModal() {
-      this.isEditModalOpen = false;
     },
     async updateWorkout() {
       try {

@@ -12,4 +12,6 @@ router.put('/:id', userController.updateUser);
 
 router.post('/login', login);
 
+router.get('/autocomplete', userController.getUserSuggestions);
+
 module.exports = router;

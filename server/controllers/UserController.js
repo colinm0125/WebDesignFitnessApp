@@ -1,6 +1,6 @@
 const userModels = require('../model/UserModel');
 const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
+
 
 module.exports = {
     async getAllUsers(req, res) {
@@ -64,13 +64,20 @@ module.exports = {
                 return res.status(400).json({ error: 'Invalid username or password.' });
             }
 
-            const token = jwt.sign({ id: user.id, role: user.role }, process.env.SUPABASE_JWT_SECRET, {
-                expiresIn: '1h'
-            });
-
             res.status(200).json({ token });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
+    },
+
+async getUserSuggestions(req, res) {
+    try {
+        const { q } = req.query;
+        const users = await UserActivation.find({ username: { $regex: q, $options: 'i' } }).limit(10);
+        res.json(users);
     }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 };
